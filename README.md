@@ -1,5 +1,6 @@
 # twitch-predcon-v1
---------------------TWITCH PREDICTION CONTEST APP - PREDCON-------------------------
+------------------------------------------------------------------------------------
+--------------------   TWITCH PREDICTION CONTEST APP - PREDCON   -------------------
 
 1. Backend Configuration
   -> Create a .env file inside backend folder.
@@ -11,14 +12,13 @@
 Install npm packages by running 'npm install' in both backend and frontend folders.
 
 Running the app in local :
-  For DEV:
-  ->> backend : npm run startdev
-  ->> frontend : npm start
+  1. For DEV:
+     ->> backend : npm run startdev
+     ->> frontend : npm start
   
-  for PROD:
-  npm start
-  ->> backend : npm start
-  ->> frontend : npm start
+  3. For PROD:
+     ->> backend : npm start
+     ->> frontend : npm start
 
 Requirements : 
 1. Twitch Client Id from  https://dev.twitch.tv/console/apps/ (Create app if not already created).
