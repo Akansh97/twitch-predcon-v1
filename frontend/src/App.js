@@ -14,6 +14,7 @@ function App() {
   const [isAdmin, setAdmin] = useState(false)
   const navigate = useNavigate();
 
+  // Check if the user is on the root URL and redirect to '/home' if so
   useEffect( () => {
     if (window.location.pathname === '/') {
       console.log('nav')

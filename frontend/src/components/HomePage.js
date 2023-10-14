@@ -1,8 +1,13 @@
 import { Button } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { UserContext } from '../UserContext'
+import twitchLogo from './twitch-logo.png'
 
 const HomePage = () => {
+
+  const {twitchIdContext} = useContext(UserContext)
+
   return (
     <div className=' p-4 bg-slate-900'>
           <div className='text-white flex flex-col items-center '>
@@ -20,18 +25,47 @@ const HomePage = () => {
               <h2 className='text-2xl ml-4 text-center text-slate-400'>Join in on the excitement with our user-friendly prediction contest application, complete with score tracking !</h2>
             </div>
 
-            <Link to='/predict' className='text-center mb-10 md:mb-20 mt-12'>
-              <Button 
-                sx={{
-                  backgroundColor : 'lime',
-                  color : 'black',
-                  "&:hover" : {
-                    backgroundColor : 'red',
-                    color:'white'
-                  }
-                }}
-                variant = 'contained' size='medium'>Lets Play !</Button>
-            </Link> 
+            <div className='text-center mb-10 md:mb-20 mt-12 flex flex-row gap-4'>
+            {
+              !twitchIdContext 
+              ?
+              <div>
+                  <Button 
+                    sx={{
+                      backgroundColor : '#ad37ff',
+                      color : 'white',
+                      paddingRight: '26px', 
+                      "&:hover" : {
+                        backgroundColor : 'lime',
+                        color:'black'
+                      }
+                    }}
+                    variant = 'contained' size='medium'
+                    onClick={() => {
+                      const e = document.getElementById('twitchLoginAnchor')
+                      e.click()
+                    }}
+                    > 
+                    <img className='w-10 h-10' src={twitchLogo} alt='twtich-logo' />
+                    Login
+                  </Button>
+                </div>
+              :
+                <Link to='/predict' className=''>
+                <Button 
+                  sx={{
+                    backgroundColor : 'lime',
+                    color : 'black',
+                    "&:hover" : {
+                      backgroundColor : 'red',
+                      color:'white'
+                    }
+                  }}
+                  variant = 'contained' size='medium'>Lets Play !</Button>
+              </Link> 
+            }
+
+            </div>
 
 
             <div className='mt-10'>

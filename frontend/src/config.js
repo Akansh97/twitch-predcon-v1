@@ -1,5 +1,3 @@
-// ------------------------------------------------------------------------
-
 // Backend API Server
 const prod_server = ""
 const dev_server = "http://localhost:4000"

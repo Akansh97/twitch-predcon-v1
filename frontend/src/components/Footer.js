@@ -1,5 +1,6 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
 import stark from './stark.png'
+import beast from './beast.png'
 
 import React from 'react'
 
@@ -7,9 +8,7 @@ const Footer = () => {
 
     const footerRef = {
         render : false,
-        content : '',
-        logo : '',
-        href : ''
+        content : ''
     }
 
   return (
@@ -85,7 +84,7 @@ const Footer = () => {
                         flex flex-row justify-center
                         gap-1
                         '>
-                        <a href={`${footerRef.href}`}
+                        <a href='https://www.twitch.tv/beaststatsofficial'
                             className='
                             hover:cursor-pointer
                             '
@@ -95,8 +94,8 @@ const Footer = () => {
                                 h-6 w-6 rounded-full
                                 md:ml-2
                             ' 
-                            src={`${footerRef.logo}`}
-                            alt='ref-alt'
+                            src={beast}
+                            alt='stark-twitch'
                         />
                         </a>
 
@@ -104,7 +103,7 @@ const Footer = () => {
                             text-center font-semibold
                             text-sm md:text-normal lg:text-lg xl:text-xl
                             ml-1
-                        '> <a href={`${footerRef.href}`}
+                        '> <a href='https://www.twitch.tv/beaststatsofficial'
                                 className='
                                 hover:cursor-pointer
                                 hover:border-b-purple-500 hover:border-b-2
@@ -122,6 +121,50 @@ const Footer = () => {
         
 
     </div>
+
+    {/* <div className='flex flex-row bg-white-800 
+        justify-between pt-2 pb-4 px-4'>
+        <div className=' '>
+            <h1>Created by 
+                <a className=' 
+                pb-4 pr-4 hover:cursor-pointer  ml-2
+                hover:border-b-purple-500 hover:border-b-2' 
+                href='https://www.twitch.tv/aka_stark'>
+                    <span>
+                        <img src={stark}
+                            className='
+                                border-2 border-slate-800
+                                ml-1 mr-2 rounded-full h-8 w-8 inline
+                            '
+                            alt='stark-profile'/>
+                    </span> 
+                    <span className='font-bold'>Aka_Stark</span>
+                </a>
+            </h1>
+        </div>
+        <div className=' '>
+        <h1 className=''>for 
+            
+        <a className=' 
+            pb-4 pr-4 hover:cursor-pointer  ml-2
+            hover:border-b-purple-500 hover:border-b-2' 
+            href='https://www.twitch.tv/beaststatsofficial'>
+                
+            <span>
+                <img src={beast}
+                    className='
+                    border-2 border-slate-800
+                    ml-1 mr-2 rounded-full h-8 w-8 inline'
+                alt='stark-profile'/>
+            </span> 
+            
+            <span className='font-bold'>BeastStats</span>
+            
+        </a>
+
+        </h1>
+        </div>
+    </div> */}
 
     <div className='
         text-black py-4 bg-slate-200 text-center

@@ -1,8 +1,8 @@
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import React, { useContext, useState, useEffect } from 'react'
 import { UserContext } from '../UserContext'
-import ResultBox from './ResultBox'
 import  serverConfig from '../config'
+import TestResult from './AdminSubmitResult';
 
 const { api_server } = serverConfig
 
@@ -14,8 +14,22 @@ const PredictResult = () => {
             setPredictionsContext
         } = useContext(UserContext)
 
+        // id, login, 
+        // display_name, type, 
+        // broadcaster_type, description, 
+        // profile_image_url, offline_image_url, 
+        // view_count, created_at
+    
+        // const checkContext = () => {
+        //     console.log({
+        //         twitchIdContext, 
+        //         predictionsContext, 
+        //     })
+        // }
+
     useEffect(()=>{
         getData()
+        // console.log('fetched', twitchIdContext, predictionsContext)
     }, [])
 
     useEffect(() => {}, [twitchIdContext, predictionsContext])
@@ -29,6 +43,7 @@ const PredictResult = () => {
                 }
             })
             const fetchedData = await rawdata.json()
+            // console.log({ 'type':typeof fetchedData, 'data fetched' : fetchedData})
             setData(fetchedData.result)
             setPredictionsContext(fetchedData.result)
         } catch (error) {
@@ -60,20 +75,21 @@ const PredictResult = () => {
             '>submit prediction result</h1>
         
         <div className='
-            p-2 bg-slate-900 text-white 
+            p-2 bg-slate-900  
             flex flex-row flex-wrap
             justify-center
             '> 
-
+        {/* <Button onClick={checkContext}>check</Button>  */}
         {
             twitchIdContext 
             ?<>
+                {/* <h1 className='p-2'>
+                    User: {twitchIdContext.display_name}
+                </h1> */}
                 {
                     data.map((e) => 
-                    <ResultBox 
+                    <TestResult 
                         data={e} 
-                        userContext = {twitchIdContext}
-                        predictionsContext = {predictionsContext}
                     /> )
                 }
                 

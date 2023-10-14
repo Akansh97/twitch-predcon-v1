@@ -1,8 +1,8 @@
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import React, { useContext, useEffect, useState } from 'react'
-import PredictionBox from './PredictionBox'
 import { UserContext } from '../UserContext'
 import  serverConfig from '../config'
+import PredictionCard from './PredictionCard';
 
 const { api_server } = serverConfig
 
@@ -23,7 +23,7 @@ const Predictions = () => {
 
     useEffect(()=>{
         getData()
-        
+        // console.log('fetched', twitchIdContext, predictionsContext)
     }, [])
 
     useEffect(() => {}, [twitchIdContext])
@@ -38,7 +38,7 @@ const Predictions = () => {
                 }
             })
             const fetchedData = await rawdata.json()
-            
+            fetchedData.result.multiSelect = true
             setData(fetchedData.result)
             setPredictionsContext(fetchedData.result)
         } catch (error) {
@@ -53,7 +53,7 @@ const Predictions = () => {
              bg-slate-800 p-2 mb-1
             
         '>
-            Active predictions 
+            Active Contests 
             
             <SportsEsportsIcon sx={{
                 marginBottom:"5px",
@@ -75,7 +75,7 @@ const Predictions = () => {
             ?<>
                 {
                     data.map((e) => 
-                    <PredictionBox 
+                    <PredictionCard 
                         data={e} 
                         userContext = {twitchIdContext}
                         predictionsContext = {predictionsContext}

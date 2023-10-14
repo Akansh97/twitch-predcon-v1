@@ -13,6 +13,16 @@ const contestantSchema = new mongoose.Schema({
         contestants: [contestantSchema],
         active : Boolean,
         title : {type:String, default:'Predict'},
+        multiSelect : {type:Boolean, default:false},
+        limit : { type: Number, default : 1},
+        expire : {
+          type : Date, 
+          default: function() {
+              const oneDayFromNow = new Date();
+              oneDayFromNow.setDate(oneDayFromNow.getDate() + 1);
+              return oneDayFromNow;
+            }
+        },
         dateTime: { type: Date, default: Date.now }
     
   });

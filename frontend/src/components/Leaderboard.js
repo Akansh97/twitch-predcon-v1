@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+// import { LeaderboardOutlined } from '@mui/icons-material'
+import React, {  useEffect, useState } from 'react'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import  serverConfig from '../config'
 
 const { api_server } = serverConfig
+
+
 
 const Leaderboard = () => {
 
@@ -10,7 +13,6 @@ const Leaderboard = () => {
 
     useEffect(()=>{
         getData()
-        console.log('fetched')
     }, [])
 
     const getData = async() => {
@@ -22,7 +24,7 @@ const Leaderboard = () => {
                 }
             })
             const fetchedData = await rawdata.json()
-            console.log({ 'type':typeof fetchedData, 'data fetched' : fetchedData})
+            
             setData(fetchedData.result)
         } catch (error) {
             console.log(error)
@@ -54,9 +56,9 @@ const Leaderboard = () => {
 
         
 
-        {/* sm md lg xl
-        <!-- Width of 16 by default, 32 on medium screens, and 48 on large screens -->
-        <img class="w-16 md:w-32 lg:w-48" src="..."></img> */}
+    {/* sm md lg xl
+    <!-- Width of 16 by default, 32 on medium screens, and 48 on large screens -->
+    <img class="w-16 md:w-32 lg:w-48" src="..."></img> */}
 
         <div className='m-auto 
             sm:max-w-custom-sm md:max-w-custom-md lg:max-w-custom-lg xl:max-w-custom-xl'>

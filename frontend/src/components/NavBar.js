@@ -1,11 +1,15 @@
 
 import TwitchLogin from './TwitchLogin'
+
 import logo2 from './logo2.png'
 import {Link} from 'react-router-dom'
 
 import { useContext, useEffect } from 'react';
 import { UserContext } from '../UserContext';
-    
+import  serverConfig from '../config'
+
+const { api_server } = serverConfig
+
 
 const Navbar = () => {
     const {
@@ -68,10 +72,16 @@ const Navbar = () => {
                 </>
                 :<></>
             }
+
+            {/* <Link to='/admin'>
+                <p className='font-medium uppercase text-slate-50 mx-2 my-1 hover:cursor-pointer'>
+                    admin
+                </p>
+            </Link> */}
         </div>
     </div>
     <TwitchLogin />
-    
+    {/* <Outlet /> */}
     </div>
 
 }

@@ -14,10 +14,10 @@ const userSchema = new mongoose.Schema(
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'Predictions',
                 },
-                option: {
+                option: [{
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'Predictions.contestants'
-                }
+                }]
             }
         ],
 

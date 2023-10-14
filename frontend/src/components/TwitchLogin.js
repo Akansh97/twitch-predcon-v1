@@ -23,6 +23,7 @@ const TwitchLogin = () => {
   
     const getTwitchUserData = async(authTokenLoaded) => {
       
+    //   console.log({"fn":authTokenLoaded})
       const rawdata = await fetch(`${api_server}/api/getTwitchUser/${authTokenLoaded}`, {
         method : "get",
         contentType : "application/json"
@@ -70,6 +71,9 @@ const TwitchLogin = () => {
                     })
                 })
                 const response = await rawrep.json()
+                // setTwitchIdContext(response)
+                // console.log({'adduser':response})
+                // alert(response.message)
 
                 const twid2 = id.toString()
                 const raw = await fetch(`${api_server}/api/getAdminDetails/${twid2}`,
@@ -81,7 +85,7 @@ const TwitchLogin = () => {
                     }
                 )
                 const response2 = await raw.json()
-                
+                // console.log({"res2":response2.result[0].admin})
                 setAdmin(response2.result[0].admin)
             }
         
@@ -104,6 +108,7 @@ const TwitchLogin = () => {
                 var item = part.split("=");
                 result[item[0]] = decodeURIComponent(item[1]);
                 });
+                // console.log({"ans": result.access_token})
         
                 const authTokenLoaded = result.access_token
                 if(!twitchIdContext)
@@ -151,7 +156,7 @@ const TwitchLogin = () => {
             }
         )
         const response2 = await raw.json()
-        
+        // console.log({"res2":response2.result[0].admin})
         setAdmin(response2.result[0].admin)
     }
 
@@ -168,6 +173,7 @@ const TwitchLogin = () => {
                 <>
                     <div className='flex flex-col items-center justify-center'>
                     <a
+                        id = 'twitchLoginAnchor'
                         className={`
                             bg-purple-700 text-slate-300
                             px-2 py-1 w-full text-center
@@ -187,6 +193,10 @@ const TwitchLogin = () => {
                 </>
             }
             
+          {/* <button onClick={() => setAuthToken(document.location.hash)}>
+            Get Token
+          </button>
+          <button onClick ={getTwitchUserData}>Get User</button> */}
             {
               loginError 
                 ? 
@@ -196,6 +206,7 @@ const TwitchLogin = () => {
                   ? 
                     <div className='text-white flex flex-col  
                         h-22 justify-center items-center bg-black'>
+                      {/* <div className=''> */}
                         <button 
                             className= {`
                                 flex self-end uppercase mr-2 mt-1 cursor-pointer text-xs
@@ -219,8 +230,10 @@ const TwitchLogin = () => {
                         </button>
                         <img className='w-8 h-8  rounded-full' 
                           src={twitchUserProfileImageUrl} alt='profile_pic'/>
+                        {/* <p className=' text-sm'>{twitchUserId}</p>
+                        <p className=' text-sm'>{twitchUserLogin}</p> */}
                         <h2 className=' mt-1 mb-4 text-xs'>{twitchUserName}</h2>
-                      
+                      {/* </div> */}
                     </div>
                   :
                     <> </>

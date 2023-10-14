@@ -34,6 +34,30 @@ const db = () => {
 
 db();
 
+// -----------------------------------------------------------
+
+const markExpiredContestsInactive = async () => {
+    
+    const currentTime = new Date();
+    try {
+      const expiredContests = await PredictionModel.find({
+        expire: { $lt: currentTime },
+        active: true, 
+      });
+      
+      for (const contest of expiredContests) {
+        contest.active = false; 
+        await contest.save();
+        console.log(`contest ${contest._id} is now inactive.`);
+      }
+    } catch (error) {
+      console.error('Error marking contest inactive:', error);
+    }
+  };
+  
+  setInterval(markExpiredContestsInactive, 60000); // Run every minute
+
+
 // ------------------------------------------------------------
 
 const key = Buffer.from(process.env.enc_key, 'hex')
@@ -78,7 +102,7 @@ app.get('/api/getTwitchUser/:authToken', (req, res) => {
         .then(resp => {
             
             const twid = resp.data[0].id
-            const encryptedData = encrypt(twid);
+            const encryptedData = encrypt(twid, key);
             const twitchId = encryptedData
             
             const {id, ...encData} = resp.data[0]
@@ -103,14 +127,17 @@ app.post('/api/addPrediction', async (req, res) => {
     const rawdata = req.body.data.names
     const active = req.body.data.active
     const title = req.body.data.title
+    const expire = req.body.data.expire
+    const multiSelect = req.body.data.multiSelect
+    const limit = req.body.data.limit
+
     const data = rawdata.map((e) => {return {name:e}})
     
-    // res.send(data)
     try {
       const newData = new PredictionModel ({ 
         contestants : [
             ...data, 
-        ], active, title
+        ], active, title, expire, multiSelect, limit
         })
     
       const result = await PredictionModel.create(newData); // Create a new document in the database
@@ -131,128 +158,181 @@ app.listen(PORT, () => {
 //get leaderboard scores
 app.get('/api/getLeaderboard', async(req, res) => {
     try {
-        const result = await UserModel.find({}, 
-            'twitchId name wins.score').sort('-wins.score')
+        const result = await UserModel.find(
+                {}, 
+                'twitchId name wins.score'
+            ).sort('-wins.score')
         res.status(200).json({result: result})
     } catch (error) {
-        res.status(500).json({error: error})
+        res.status(501).json({error: error})
     }
 })
 
 //get all predictions
 app.get('/api/getPredictions', async(req,res) => {
     try {
-        const result = await PredictionModel.find().sort('-dateTime')
+        const result = await PredictionModel.find().sort('expire')
         res.status(200).json({result: result})
     } catch (error) {
-        res.status(500).json({error: error})
+        res.status(501).json({error: error})
     }
 })
 
 //add bet for an user
 app.patch('/api/addBet', async(req, res) => {
-    console.log(req.body)
-    const {predId, option, twitchId} = req.body
-    // const predId = '6521391f866c1d4701011634'
-    // const option = '6521391f866c1d4701011635'
-    // const twitchId = '6sdve3t4'
-    const result = await UserModel.updateOne( 
-        {
-            'twitchId' : twitchId,
-            'bets.predId' : {
-                $ne :  predId
+    try {
+        const {predId, option, twitchId} = req.body
+        // const predId = '65206393f25fc5e79dcfa076'
+        // const option = ['65206393f25fc5e79dcfa077', '65206393f25fc5e79dcfa078']
+        // const twitchId = 'df022409f6e6d57549018216b07270f5'
+        const result = await UserModel.updateOne( 
+            {
+                'twitchId' : twitchId,
+                'bets.predId' : {
+                    $ne :  predId
+                }
+            },
+    
+            {
+                $push : {
+                    'bets' : { predId : predId, option : [...option] }
+                }
             }
-        },
+        )
+        result.modifiedCount > 0 
+            ? res.status(200).json({ message: "Prediction Submitted !", result: result })
+            : res.status(200).json({ message: "Prediction already submitted !", result: result })
+        
+    } catch (error) {
+        res.status(501).json({error})
+    }
 
-        {
-            $push : {
-                'bets' : { predId : predId, option : option }
-            }
-        }
-    )
-    result.modifiedCount > 0 
-        ? res.status(200).json({ message: "Prediction Submitted !", result: result })
-        : res.status(200).json({ message: "Prediction already submitted !", result: result })
     
 })
 
 // get all bets of an user
 app.get('/api/getUserBets', async(req, res) => {
-    const twitchId = '6sdve3t4'
-    const result = await UserModel.find(
-        {'twitchId' : twitchId}, 
-        'bets'
-        )
-    res.status(200).json({result : result})
+    try {
+        const twitchId = req.body.twitchId
+        // const twitchId = 'df022409f6e6d57549018216b07270f5'
+        const result = await UserModel.find(
+            {'twitchId' : twitchId}, 
+            'bets'
+            )
+        res.status(200).json({result : result})
+    } catch (error) {
+        res.status(200).json({error : error})
+    }
+
 })  
 
 // get admin status
 app.get('/api/getAdminDetails/:twid', async(req, res) => {
-    console.log(req.params)
-    const twitchId = req.params.twid
-    const result = await UserModel.find(
-        {'twitchId' : twitchId}, 
-        'admin'
-        )
-    res.status(200).json({result : result})
+    try {
+        console.log('admin',req.params)
+        const twitchId = req.params.twid
+        const result = await UserModel.find(
+            {'twitchId' : twitchId}, 
+            'admin'
+            )
+        res.status(200).json({result : result})
+    } catch (error) {
+        res.status(501).json({error : error})
+    }
+
 })  
 
 //update scores of all users for correct bets
 app.patch('/api/updateScore', async(req,res) => {
-    const {predId, ansId } = req.body
-    // const predId = '652132c233c1f6ea2c5f67e4'
-    // const ansId = '652132c233c1f6ea2c5f67e5'
-    const result = await UserModel.updateMany(
-        {
-            "bets" : { 
-                $elemMatch :{
-                    'predId' : predId,
-                    'option' : ansId
-                }
-            },
-            'wins.preds': { $not: { $elemMatch: { predId: predId } } }
-        },
-        {
-            $inc : {
-                    'wins.score' : 1 
+
+    try {
+        const {predId, ansId } = req.body
+
+        const allUsers = await UserModel.find( {}, 'twitchId')
+
+        userIds = allUsers.map( e => e.twitchId)
+        console.log(userIds)
+        let results = []
+        let betsLet = []
+        
+        for(let i = 0 ; i < userIds.length; i++) {
+            const twitchId = userIds[i]
+
+            const bets = await UserModel.find(
+                {
+                    'twitchId' : twitchId
+                }, 
+                
+                'bets'
+            )
+            betsLet = bets[0].bets
+            
+            betsLet = betsLet.filter(e => e.predId.toString() === predId)
+
+            const options = betsLet[0] ? betsLet[0].option : betsLet[0]
+            
+            options ? 
+                console.log({match : ansId.reduce((count, option) => (options.includes(option) ? count + 1 : count), 0)})
+                : console.log('no match')
+            const result = await UserModel.updateMany(
+                {
+                    'twitchId' : twitchId,
+                    "bets" : { 
+                        $elemMatch :{
+                            'predId' : predId,
+                            'option' :  { $in: [...ansId] }
+                        }
+                    },
+                    'wins.preds': { $not: { $elemMatch: { predId: predId } } }
                 },
-            $push : {
-                'wins.preds': {predId : predId}
+                {
+                    $inc : {
+                            'wins.score' : options ? ansId.reduce((count, option) => (options.includes(option) ? count + 1 : count), 0)
+                                                    : 0 
+                        },
+                    $push : {
+                        'wins.preds': {predId : predId}
+                    }
+                }
+            )
+
+            results.push(result)
+            
+        }
+
+        // res.status(200).json({ result: results, message: 'Prediction Result Submitted !' })
+
+        const result2 = await PredictionModel.updateOne(
+            {
+                _id : predId
+            },
+            {
+            $set : { active: false} 
             }
-        }
-    )
+        )
 
-    const result2 = await PredictionModel.updateOne(
-        {
-            _id : predId
-        },
-        {
-           $set : { active: false} 
-        }
-    )
+        res.status(200).json({ result: results, result2: result2, message: 'Prediction Result Submitted !' })
+    } catch (error) {
+        res.status(501).json({ error : error, meesage : 'Internal Server Error' })
+    }
 
-    console.log({predId : predId, res2 : result2})
-
-
-
-    res.status(200).json({ result: result, result2: result2, message: 'Prediction Result Submitted !' })
+    
 })
 
 //add New User
 app.post('/api/addUser', async(req, res) => {
 
     const data = req.body
-    console.log("ADD_DATA", data)
 
     const createUser = async() => {
         try {
             const result = await UserModel.create(data)
-            console.log(result)
+
             res.status(200).json({message:"user created",result})
             
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: error.message });
+
+            res.status(501).json({ error: error.message });
         }
     }
 
@@ -265,6 +345,7 @@ app.post('/api/addUser', async(req, res) => {
     try {
         const findQuery = UserModel.find(query)
         const result = await findQuery.exec()
+        
         if(!result || result.length === 0)
             return createUser()
         else res.status(200).json({message: "user found!", result})
