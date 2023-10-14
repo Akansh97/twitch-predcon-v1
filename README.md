@@ -1,63 +1,58 @@
 # Twitch Predcon v1
 
-A simple Prediction Contest application in which Admin user can post prediction contests with submition deadline time and option selection limits (single option or multi select).
-Once Admin user submits contest result, scores get updated for all users who participated in that contest.
-Twitch API used for user login (Encrypted).
+Twitch Predcon v1 is a straightforward Prediction Contest application. It allows Admin users to create prediction contests with specific submission deadlines and options for users to select (single or multiple options). After Admin users submit the contest results, scores are updated for all participating users. The application uses Twitch API for user login, ensuring secure encryption.
 
 ## Tech Stack
-- Backend - Express JS, Mongo DB
-- Frontend - React JS
+- Backend: Express JS, MongoDB
+- Frontend: React JS
 
-------------------------------------------------------------------------------------
-# Twitch Prediction Contest App - PREDCON 
+## Configuration
 
-## 1.  Backend Configuration
-  - > Create a .env file inside backend folder.
-  - > Configure Environment variables, refer .env.example file.
+### Backend Configuration
+1. Create a `.env` file inside the backend folder.
+2. Configure the environment variables as specified in the `.env.example` file.
 
-## 2. Frontend Configuration
-  - > Configure config.json inside frontend folder.
+### Frontend Configuration
+1. Modify the `config.json` file located in the frontend folder.
+2. Install the required npm packages by running 'npm install' in both the backend and frontend folders.
 
- Install npm packages by running 'npm install' in both backend and frontend folders.
+## Running the App
+- **Development (DEV):**
+  - Start the backend server: `npm run startdev`
+  - Launch the frontend: `npm start`
 
-## Running the app:
-  - DEV:
-     - > backend : npm run startdev
-     - > frontend : npm start
-  
-  - PROD:
-     - > backend : npm start
-     - > frontend : npm start
+- **Production (PROD):**
+  - Start the backend server: `npm start`
+  - Launch the frontend: `npm start`
 
-## Requirements: 
-- > Twitch Client Id from  https://dev.twitch.tv/console/apps/ 
-- > Mongo DB as backend DB.
+## Requirements
+- Obtain a Twitch Client ID from the [Twitch Developer Dashboard](https://dev.twitch.tv/console/apps/).
+- Set up a MongoDB instance as the backend database.
 
-### Setting a user as admin:
- - > For setting a user as admin, 'admin' field needs to be set as 'true' in User's Mongo DB document.
+### Admin User Setup
+- To designate a user as an admin, simply set the 'admin' field to 'true' in the user's MongoDB document.
 
-### Twitch user data 
-- > 'Twitch Id' is encrypted and stored in DB on first login.
-- > Twitch Data saved in DB : 1. Twitch Id (encrypted) 2. Twitch User Name
-- > Login is handled by Twitch through its API.
-------------------------------------------------------------------------------------
+### Twitch User Data
+- On a user's first login, their 'Twitch ID' is securely encrypted and stored in the database.
+- The user's Twitch data includes the encrypted Twitch ID and Twitch username.
+- The login process is exclusively handled by Twitch through its API.
 
-App Screenshots 
-- > Home Page
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/b04ca3ca-2446-4926-8d90-7bea53cf6e3b)
-- > Home Page (Logged In)
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/a696e968-2709-4a70-aa40-8227802b1acb)
-- > Active Contests Page
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/612d6db2-3eed-4c97-9b44-73dcb69dbd41)
-- > Leaderboard Page
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/38cfb9b4-7239-4aa7-9a16-19b8184794cd)
-- > Add New Contest - ADMIN
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/da8d4026-2bf4-436f-83c3-e34ca52cbfb2)
-- > Submit Contest Result - ADMIN
-![image](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/7138a090-f1b7-43d4-931a-7ecc134cdb60)
+## App Screenshots
 
+- **Home Page**
+![Home Page](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/b04ca3ca-2446-4926-8d90-7bea53cf6e3b)
 
+- **Home Page (Logged In)**
+![Home Page (Logged In)](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/a696e968-2709-4a70-aa40-8227802b1acb)
 
+- **Active Contests Page**
+![Active Contests Page](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/612d6db2-3eed-4c97-9b44-73dcb69dbd41)
 
+- **Leaderboard Page**
+![Leaderboard Page](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/38cfb9b4-7239-4aa7-9a16-19b8184794cd)
 
+- **Add New Contest - ADMIN**
+![Add New Contest - ADMIN](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/da8d4026-2bf4-436f-83c3-e34ca52cbfb2)
 
+- **Submit Contest Result - ADMIN**
+![Submit Contest Result - ADMIN](https://github.com/Akansh97/twitch-predcon-v1/assets/47331547/7138a090-f1b7-43d4-931a-7ecc134cdb60)
